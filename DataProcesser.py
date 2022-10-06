@@ -1,6 +1,8 @@
 # This program takes the files from the csv and repackages them as an array of objects
 
 import csv
+import math
+import subprocess
 
 # You will need to change the file path for your device. Ideally, we could feed this information about file location
 # from a launcher or an installer
@@ -25,15 +27,6 @@ with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data
     csv_reader = csv.reader(csv_file, delimiter=',')
     slope_list = list(csv_reader)
 
-# This section of code was to test writing to a new file. It is not relevant for the current program
-'''
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/TestData.txt", mode="w") as csv_file:
-    csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    csv_writer.writerow(['A', 'B', 'C'])
-'''
-
-# The there are 1277 rows and 1277 columns for each of lists.
-# print(len(latitude_list), len(longitude_list), len(height_list), len(slope_list))
 
 dataArray = []
 
@@ -77,10 +70,34 @@ def generate_data_array():
     number_of_rows = len(longitude_list)
     number_of_col = len(longitude_list[0])
 
-    for row in range(number_of_rows):  # Replace 1 with number_of_rows
+    for row in range(number_of_rows):
         for data_pt in range(number_of_col):
             dataArray.append(DataPoint(latitude_list[row][data_pt], longitude_list[row][data_pt],
                                        height_list[row][data_pt], slope_list[row][data_pt]))
+
+
+def convert_degrees_to_meters(deg):  # takes in degrees latitude
+    return 30366 * (90 + deg)
+
+
+def x_cord_from_polar(r, theta):
+    return r * math.cos(theta * math.pi / 180)
+
+
+def y_cord_from_polar(r, theta):
+    return r*math.sin(theta*math.pi/180)
+
+
+def write_rect_file(dataArr):
+    with open("C:/Users/Owner/Documents/NASA project/Raw Data/Rectangular Coordinate Data.csv", mode="w")\
+            as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(['x cord (in meters)', 'y cord (in meters)', 'height (in meters)', 'slope (in degrees)'])
+        for i in range(len(dataArr)):
+            r_meters = convert_degrees_to_meters(dataArr[i].latitude)
+            csv_writer.writerow([x_cord_from_polar(r_meters, dataArr[i].longitude),
+                                 y_cord_from_polar(r_meters, dataArr[i].longitude), dataArr[i].height,
+                                 dataArr[i].slope])
 
 
 def find_min_height(dataArr):
@@ -133,9 +150,12 @@ def find_min_lat(dataArr):
 
 generate_data_array()
 
-# dataArray[0].print_data()
-# You can change the above line to retrieve a specific bit of data
 
 absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height)+abs(absolute_min_height))
+
+write_rect_file(dataArray)
+
+process = subprocess.run(["cmd", "/c", "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Cartographer.py"],
+                         capture_output=True, text=True, check=True)
