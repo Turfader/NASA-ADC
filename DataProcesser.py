@@ -1,7 +1,6 @@
 # This program takes the files from the csv and repackages them as an array of objects
 
 import csv
-import pygame
 
 # You will need to change the file path for your device. Ideally, we could feed this information about file location
 # from a launcher or an installer
