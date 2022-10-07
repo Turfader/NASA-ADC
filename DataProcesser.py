@@ -27,6 +27,7 @@ with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data
     csv_reader = csv.reader(csv_file, delimiter=',')
     slope_list = list(csv_reader)
 
+# The there are 1277 rows and 1277 columns for each of lists.
 
 dataArray = []
 
@@ -70,7 +71,7 @@ def generate_data_array():
     number_of_rows = len(longitude_list)
     number_of_col = len(longitude_list[0])
 
-    for row in range(number_of_rows):
+    for row in range(number_of_rows):  # Replace 1 with number_of_rows
         for data_pt in range(number_of_col):
             dataArray.append(DataPoint(latitude_list[row][data_pt], longitude_list[row][data_pt],
                                        height_list[row][data_pt], slope_list[row][data_pt]))
@@ -89,7 +90,7 @@ def y_cord_from_polar(r, theta):
 
 
 def write_rect_file(dataArr):
-    with open("C:/Users/Owner/Documents/NASA project/Raw Data/Rectangular Coordinate Data.csv", mode="w")\
+    with open("C:/Users/Owner/Documents/NASA project/Raw Data/Rectangular Coordinate Data.csv", mode="w", newline="")\
             as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['x cord (in meters)', 'y cord (in meters)', 'height (in meters)', 'slope (in degrees)'])
@@ -150,6 +151,8 @@ def find_min_lat(dataArr):
 
 generate_data_array()
 
+# dataArray[0].print_data()
+# You can change the above line to retrieve a specific bit of data
 
 absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
@@ -159,3 +162,4 @@ write_rect_file(dataArray)
 
 process = subprocess.run(["cmd", "/c", "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Cartographer.py"],
                          capture_output=True, text=True, check=True)
+# remember to change the pathing later
