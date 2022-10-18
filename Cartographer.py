@@ -1,71 +1,40 @@
 # This program is used to create the heightmap and slope map from the data
 
-from PIL import Image
-# import ImageDraw
 import csv
-import pygame
-from pygame import gfxdraw
+import os
 
-x_coords = []
-y_coords = []
-heights = []
-slopes = []
 
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/Rectangular Coordinate Data.csv") as csv_file:
+rect_coord_path = os.getcwd() + "/Raw Data/Rectangular Coordinate Data.csv"
+rect_coord_path = rect_coord_path.replace("\\", "/")
+with open(rect_coord_path, mode="r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     full_list = list(csv_reader)
 
-
+# The following function is obsolete, but I am keeping it in for reference
 def calculate_color(height):
     color = ((height+2872)*255/4830)
-    return color, color, color
+    return int(color), int(color), int(color)
+# data is being lost by saving as an int ^^
 
 
-# min x = -31 062
-# max x = 20 047
-# min y = -12 036
-# max y = 39 073
-### Testing below, please ignore ###
+### Image drawing ###
 
 
-def draw_points():
+width, height = (1278, 1278)
+
+
+def generate_heightmap():
     for i in range(1, len(full_list)):
-        x_pos = (float(full_list[i][0])/100) + 350
-        y_pos = (float(full_list[i][1])/100) + 250
-        color = calculate_color(float(full_list[i][2]))
-        gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)  # note that there is a bit of data loss here.
-        # Ideally, we'd make the final image have a size equal to the maximum span of the x and y data
+        x_pos = ((float(full_list[i][0])) + 31062.917916580405)/40  # This section of code still needs a little work. The /40 is used for 
+        # compressing it into an image without empty space. IDK how we'll want to port this into blender.
+        y_pos = ((float(full_list[i][1])) + 12036.902076767392)/40
+        # The following line of code does not work yet. We need to add the minimum height still
+        #height = ((float(full_list[i][2])) + ###min height###)
+        color = calculate_color(float(full_list[i][2]))  # this line of code is obsolete, but I am keeping it in for reference
+        print()
+        print(i)
+        print(x_pos, x_pos//1)  # the whole number rounding is a product of impercision. This section needs to be looked at again.
+        print(y_pos, y_pos//1)
+        print(color)
 
-
-def draw_slopes():
-    for i in range(1, len(full_list)):
-        x_pos = (float(full_list[i][0])/100) + 350
-        y_pos = (float(full_list[i][1])/100) + 250
-        if float(full_list[i][3]) >= 20:
-            color = (255, 0, 0)
-        elif float(full_list[i][3]) >= 8:
-            color = (255, 165, 0)
-        else:
-            color = (50, 150, 50)
-        gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
-
-
-print("initiating pygame")
-pygame.init()
-screen = pygame.display.set_mode((700, 700))
-# "zero" = 350,350
-
-done = False
-clock = pygame.time.Clock()
-while not done:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-
-    screen.fill((0, 0, 255))
-
-    draw_points()
-    # draw_slopes()
-
-    pygame.display.flip()
-    clock.tick(60)
+        data[x_pos//1, y_pos//1] = color
