@@ -2,32 +2,40 @@
 
 import csv
 import math
-import subprocess
+import os
 
-# You will need to change the file path for your device. Ideally, we could feed this information about file location
-# from a launcher or an installer
 
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data-file-latitude/"
-          "FY20 ADC Regional Data File LATITUDE.csv") as csv_file:
+latitude_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-latitude/" \
+                              "FY20 ADC Regional Data File LATITUDE.csv"
+latitude_path = latitude_path.replace("\\", "/")
+with open(latitude_path) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     latitude_list = list(csv_reader)
 
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data-file-longitude/"
-          "FY20 ADC Regional Data File LONGITUDE.csv") as csv_file:
+
+longitude_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-longitude/" \
+                               "FY20 ADC Regional Data File LONGITUDE.csv"
+longitude_path = longitude_path.replace("\\", "/")
+with open(longitude_path) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     longitude_list = list(csv_reader)
 
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data-file-height/"
-          "FY20 ADC Regional Data File HEIGHT.csv") as csv_file:
+
+height_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-height/" \
+                               "FY20 ADC Regional Data File HEIGHT.csv"
+height_path = height_path.replace("\\", "/")
+with open(height_path) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     height_list = list(csv_reader)
 
-with open("C:/Users/Owner/Documents/NASA project/Raw Data/fy20-adc-regional-data-file-slope/"
-          "FY20 ADC Regional Data File SLOPE.csv") as csv_file:
+
+slope_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-slope/" \
+                           "FY20 ADC Regional Data File SLOPE.csv"
+slope_path = slope_path.replace("\\", "/")
+with open(slope_path) as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
     slope_list = list(csv_reader)
 
-# The there are 1277 rows and 1277 columns for each of lists.
 
 dataArray = []
 
@@ -78,7 +86,7 @@ def generate_data_array():
 
 
 def convert_degrees_to_meters(deg):  # takes in degrees latitude
-    return 30366 * (90 + deg)
+    return (30366+1/9) * (90 + deg)
 
 
 def x_cord_from_polar(r, theta):
@@ -90,15 +98,25 @@ def y_cord_from_polar(r, theta):
 
 
 def write_rect_file(dataArr):
-    with open("C:/Users/Owner/Documents/NASA project/Raw Data/Rectangular Coordinate Data.csv", mode="w", newline="")\
-            as csv_file:
+    rect_coord_path = os.getcwd() + "/Raw Data/Rectangular Coordinate Data.csv"
+    rect_coord_path = rect_coord_path.replace("\\", "/")
+    min_x =0
+    min_y = 0
+    with open(rect_coord_path, mode="w", newline="") as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['x cord (in meters)', 'y cord (in meters)', 'height (in meters)', 'slope (in degrees)'])
         for i in range(len(dataArr)):
             r_meters = convert_degrees_to_meters(dataArr[i].latitude)
-            csv_writer.writerow([x_cord_from_polar(r_meters, dataArr[i].longitude),
-                                 y_cord_from_polar(r_meters, dataArr[i].longitude), dataArr[i].height,
+            x = x_cord_from_polar(r_meters, dataArr[i].longitude)
+            y = y_cord_from_polar(r_meters, dataArr[i].longitude)
+            csv_writer.writerow([x, y, dataArr[i].height,
                                  dataArr[i].slope])
+            if x < min_x:
+                min_x = x
+            if y < min_y:
+                min_y = y
+    print("min x: ", min_x)
+    print("min y: ", min_y)
 
 
 def find_min_height(dataArr):
@@ -151,15 +169,9 @@ def find_min_lat(dataArr):
 
 generate_data_array()
 
-# dataArray[0].print_data()
-# You can change the above line to retrieve a specific bit of data
 
 absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height)+abs(absolute_min_height))
 
 write_rect_file(dataArray)
-
-process = subprocess.run(["cmd", "/c", "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Cartographer.py"],
-                         capture_output=True, text=True, check=True)
-# remember to change the pathing later
