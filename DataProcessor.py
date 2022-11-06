@@ -3,73 +3,32 @@
 import csv
 import math
 import os
-import FolderCreator
+import FolderCreator as fc
 
-with open(Pather.textfile_path, 'r') as f:
+with open(fc.testerpathfile_path, 'r') as f:
     paths = f.readlines()
     f.close()
 
+latitude_path = paths[0].replace("\\", "/")
+longitude_path = paths[1].replace("\\", "/")
+height_path = paths[2].replace("\\", "/")
+slope_path = paths[3].replace("\\", "/")
 
-
-# latitude_path = # [Some Folder Defined by FolderCreator.py]/[Path from First Line of the file from PathFinder]
-# (REPLACE \\ with / AT THE END -- IMPORTANT)
+# Creates Lists of each Data Type from the Paths Given.
 with open(latitude_path) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    latitude_list = list(csv_reader)
-
-
-longitude_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-longitude/" \
-                               "FY20 ADC Regional Data File LONGITUDE.csv"
-longitude_path = longitude_path.replace("\\", "/")
+    latitude_list = list(csv.reader(csv_file, delimiter=','))
+    csv_file.close()
 with open(longitude_path) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    longitude_list = list(csv_reader)
-
-
-height_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-height/" \
-                               "FY20 ADC Regional Data File HEIGHT.csv"
-height_path = height_path.replace("\\", "/")
+    longitude_list = list(csv.reader(csv_file, delimiter=','))
+    csv_file.close()
 with open(height_path) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    height_list = list(csv_reader)
-
-
-slope_path = os.getcwd() + "/Raw Data/fy20-adc-regional-data-file-slope/" \
-                           "FY20 ADC Regional Data File SLOPE.csv"
-slope_path = slope_path.replace("\\", "/")
+    height_list = list(csv.reader(csv_file, delimiter=','))
+    csv_file.close()
 with open(slope_path) as csv_file:
-    csv_reader = csv.reader(csv_file, delimiter=',')
-    slope_list = list(csv_reader)
-
+    slope_list = list(csv.reader(csv_file, delimiter=','))
+    csv_file.close()
 
 dataArray = []
-
-# NOT OPTIMIZED, FIX FOR TIME COMPLEXITY IMPROVEMENT
-class DataPoint:
-
-    def __init__(self, lat, lon, hei, slo):
-        self.latitude = float(lat)
-        self.longitude = float(lon)
-        self.height = float(hei)
-        self.slope = float(slo)
-
-    def get_lat(self):
-        return self.latitude
-
-    def get_lon(self):
-        return self.longitude
-
-    def get_height(self):
-        return self.height
-
-    def get_slope(self):
-        return self.slope
-
-    def print_data(self):
-        print(f"Latitude: {self.latitude}")
-        print(f"Longitude: {self.longitude}")
-        print(f"Height: {self.height}")
-        print(f"Slope: {self.slope}") #
 
 
 # Call from each file instead of class specific calls.
@@ -82,102 +41,92 @@ def generate_data_array():
         print("Number of columns are inconsistent")
         return
 
-    number_of_rows = len(longitude_list)
-    number_of_col = len(longitude_list[0])
+    rows = len(longitude_list)
+    cols = len(longitude_list[0])
 
-    for row in range(number_of_rows):  # Replace 1 with number_of_rows
-        for data_pt in range(number_of_col):
-            dataArray.append(DataPoint(latitude_list[row][data_pt], longitude_list[row][data_pt],
-                                       height_list[row][data_pt], slope_list[row][data_pt]))
+    for row in range(rows):
+        for data_pt in range(cols):
+            # dataArray[k][0] = Lat, dA[k][1] = long, dA[k][2] = ht, dA[k][3] = slope
+            dataArray.append(
+                [latitude_list[row][data_pt], longitude_list[row][data_pt], height_list[row][data_pt],
+                 slope_list[row][data_pt]]
+            )
 
 
+# Helper Functions for Math
 def convert_degrees_to_meters(deg):  # takes in degrees latitude
-    return (30366+1/9) * (90 + deg)
-
-
+    return (30366 + 1 / 9) * (90 + deg)
 def x_cord_from_polar(r, theta):
     return r * math.cos(theta * math.pi / 180)
-
-
 def y_cord_from_polar(r, theta):
-    return r*math.sin(theta*math.pi/180)
+    return r * math.sin(theta * math.pi / 180)
 
 
-def write_rect_file(dataArr):
-    rect_coord_path = os.getcwd() + "/Raw Data/Rectangular Coordinate Data.csv"
-    rect_coord_path = rect_coord_path.replace("\\", "/")
-    min_x =0
-    min_y = 0
-    with open(rect_coord_path, mode="w", newline="") as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+def write_rect_file(data_arr):
+    rect_coord_path = fc.path_sub1.replace("\\", "/") + "/ProcessedCoordinateData.csv"  # Processed Data Folder given from FolderCreator.py
+    # min_x = 0
+    # min_y = 0
+    with open(rect_coord_path, mode="w", newline="") as datafile:
+        csv_writer = csv.writer(datafile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow(['x cord (in meters)', 'y cord (in meters)', 'height (in meters)', 'slope (in degrees)'])
-        for i in range(len(dataArr)):
-            r_meters = convert_degrees_to_meters(dataArr[i].latitude)
-            x = x_cord_from_polar(r_meters, dataArr[i].longitude)
-            y = y_cord_from_polar(r_meters, dataArr[i].longitude)
-            csv_writer.writerow([x, y, dataArr[i].height,
-                                 dataArr[i].slope])
-            if x < min_x:
-                min_x = x
-            if y < min_y:
-                min_y = y
-    print("min x: ", min_x)
-    print("min y: ", min_y)
+        for i in range(len(data_arr)):
+            r_meters = convert_degrees_to_meters(data_arr[i][0])  # 0 is Latitude
+            x = x_cord_from_polar(r_meters, data_arr[i][1])  # 1 is Longitude
+            y = y_cord_from_polar(r_meters, data_arr[i][1])
+            csv_writer.writerow([x, y, data_arr[i][2],  # 2 is Height
+                                 data_arr[i][3]])  # 3 is Slope
+        datafile.close()
+            # if x < min_x:
+            #    min_x = x
+            # if y < min_y:
+            #    min_y = y
+    # print("min x: ", min_x)
+    # print("min y: ", min_y)
 
+    '''
+    FIX THIS SECTION TO GET THE AVERAGE VALUES, ETC. 
+    - IN NEED OF MORE INFORMATION. 
+    
+    testeroutputfile_path = os.path.join(rect_coord_path, "TestAverageOutput")
+    with open(testeroutputfile_path, 'w') as f:
+        f.write(
+            
+        )
+    '''
 
-def find_min_height(dataArr):
-    temp_min_height = float(dataArr[0].height)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].height) < temp_min_height:
-            temp_min_height = float(dataArr[i].height)
-    return temp_min_height
+# Helper Methods for Finding Maximums and Minimums of Each Attribute of <DataArray>
+def find_max_value(data_arr, attr):
+    tmp = float(data_arr[0][attr])
+    for i in range(len(data_arr)):
+        if float(data_arr[i][attr]) > tmp:
+            tmp = float(data_arr[i][attr])
+    return tmp
 
+def find_min_value(data_arr, attr):
+    tmp = float(data_arr[0][attr])
+    for i in range(len(data_arr)):
+        if float(data_arr[i][attr]) < tmp:
+            tmp = float(data_arr[i][attr])
+    return tmp
 
-def find_max_height(dataArr):
-    temp_max_height = float(dataArr[0].height)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].height) > temp_max_height:
-            temp_max_height = float(dataArr[i].height)
-    return temp_max_height
-
-
-def find_max_lon(dataArr):
-    temp_max_lon = float(dataArr[0].longitude)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].longitude) > temp_max_lon:
-            temp_max_lon = float(dataArr[i].longitude)
-    return temp_max_lon
-
-
-def find_min_lon(dataArr):
-    temp_min_lon = float(dataArr[0].longitude)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].longitude) < temp_min_lon:
-            temp_min_lon = float(dataArr[i].longitude)
-    return temp_min_lon
-
-
-def find_max_lat(dataArr):
-    temp_max_lat = float(dataArr[0].latitude)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].latitude) > temp_max_lat:
-            temp_max_lat = float(dataArr[i].latitude)
-    return temp_max_lat
-
-
-def find_min_lat(dataArr):
-    temp_min_lat = float(dataArr[0].latitude)
-    for i in range(len(dataArr)):
-        if float(dataArr[i].latitude) < temp_min_lat:
-            temp_min_lat = float(dataArr[i].latitude)
-    return temp_min_lat
+def find_min_height(data_arr):
+    return find_min_value(data_arr, 2)
+def find_max_height(data_arr):
+    return find_max_value(data_arr, 2)
+def find_max_lon(data_arr):
+    return find_max_value(data_arr, 1)
+def find_min_lon(data_arr):
+    return find_min_value(data_arr, 1)
+def find_max_lat(data_arr):
+    return find_max_value(data_arr, 0)
+def find_min_lat(data_arr):
+    return find_min_value(data_arr, 0)
 
 
 generate_data_array()
 
-
 absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
-abs_zero_height_scale = (abs(absolute_max_height)+abs(absolute_min_height))
+abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
 write_rect_file(dataArray)
