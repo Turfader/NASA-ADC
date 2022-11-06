@@ -16,7 +16,7 @@ def makePolys(input):
     faces.append([ input, (input+1277+1), input+1 ]) # change this later
     faces.append([ input, input+1277, (input+1277+1) ])
 
-csvpoints= "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Artemis_ADC/Raw Data/Rectangular Coordinate Data.csv"     #path name for the csv output by DataProcesser.py 
+csvpoints= "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Artemis_ADC/Raw Data/Rectangular Coordinate Data.csv"     #path name for the csv output by DataProcessor.py
 pointsReader = csv.reader(open(csvpoints, newline=''), delimiter=',')   
 
 with open(csvpoints, 'rt', encoding="utf8") as csvfile:
