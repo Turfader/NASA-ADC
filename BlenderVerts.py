@@ -11,10 +11,12 @@ faces = []
 
 
 def makePolys(input):
-    if input%1276 == 0:
+
+    if input + 1277 + 1 >= len(verts): # work on changing out the 1277 later
         return
-    faces.append([ input, (input+1277+1), input+1 ]) # change this later
-    faces.append([ input, input+1277, (input+1277+1) ])
+    if (abs(verts[input][0] - verts[(input+1277+1)][0]) < 45):
+        faces.append([ input, (input+1277+1), input+1 ])
+        faces.append([ input, input+1277, (input+1277+1) ])
 
 csvpoints= "C:/Users/Owner/PycharmProjects/NASA_Artemis_ADC/Artemis_ADC/Raw Data/Rectangular Coordinate Data.csv"     #path name for the csv output by DataProcessor.py
 pointsReader = csv.reader(open(csvpoints, newline=''), delimiter=',')   
@@ -38,7 +40,7 @@ mesh = bpy.data.meshes.new("wave")
 object = bpy.data.objects.new("wave",mesh)
 
 #create mesh from python data
-mesh.from_pydata(verts,[],faces) # doesn't work, but almost does
+mesh.from_pydata(verts,[],faces)
 mesh.update(calc_edges=True)
 
 #set mesh location
