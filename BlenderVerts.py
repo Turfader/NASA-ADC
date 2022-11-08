@@ -29,13 +29,14 @@ faces = []
 
 def makePolys(input):
 
-    if input + x_and_y_dims + 1 >= len(verts): # work on changing out the 1277 later # done
+    if input + x_and_y_dims + 1 >= len(verts): # work on changing out the 1277 later
         return
     if (abs(verts[input][0] - verts[(input+x_and_y_dims+1)][0]) < (dist_btw_pts * 1.25)):
         faces.append([ input, (input+x_and_y_dims+1), input+1 ])
         faces.append([ input, input+x_and_y_dims, (input+x_and_y_dims+1) ])
 
-csvpoints= "C:/Users/Owner/Desktop/ADCLander/ProcessedData/ProcessedCoordinateData.csv"     #path name for the csv output by DataProcesser.py 
+csvpoints = os.getcwd() + "/ProcessedData/ProcessedCoordinateData.csv"     #path name for the csv output by DataProcesser.py 
+csvpoints = csvpoints.replace("\\","/")
 pointsReader = csv.reader(open(csvpoints, newline=''), delimiter=',')   
 
 with open(csvpoints, 'rt', encoding="utf8") as csvfile:
