@@ -1,7 +1,9 @@
 """
-FolderCreator.py makes folders and directories for all files for the FPA Team NASA App Development Challenge Application.
+FolderCreator.py makes folders and directories for all files for the FPA Team NASA
+App Development Challenge Application.
 """
 import os
+
 # Names
 main_folder_name = "ADCLander"
 sub_folder_1_name = "ProcessedData"
@@ -30,8 +32,6 @@ try:
     os.mkdir(path_sub1)
     os.mkdir(path_sub2)
     os.mkdir(path_sub3)
-
-
 
     # THIS SECTION WILL NOT BE IN THE FINAL PRODUCT --------------------------
     # datanames = ['RegHeight.csv', 'RegLat.csv', 'RegLong.csv', 'RegSlope.csv']

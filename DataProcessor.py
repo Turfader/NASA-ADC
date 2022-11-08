@@ -2,7 +2,6 @@
 
 import csv
 import math
-import os
 import FolderCreator as fc
 
 with open(fc.testerpathfile_path, 'r') as f:
@@ -48,6 +47,7 @@ def generate_data_array():
         for data_pt in range(cols):
             # dataArray[k][0] = Lat, dA[k][1] = long, dA[k][2] = ht, dA[k][3] = slope
             dataArray.append(
+                # TODO: Double Check the Correctness of this Statement.
                 [latitude_list[row][data_pt], longitude_list[row][data_pt], height_list[row][data_pt],
                  slope_list[row][data_pt]]
             )
@@ -83,10 +83,8 @@ def write_rect_file(data_arr):
     # print("min x: ", min_x)
     # print("min y: ", min_y)
 
+    # TODO: Get FilePath and Data Clarified to Finish Writing Average File.
     '''
-    FIX THIS SECTION TO GET THE AVERAGE VALUES, ETC. 
-    - IN NEED OF MORE INFORMATION. 
-    
     testeroutputfile_path = os.path.join(rect_coord_path, "TestAverageOutput")
     with open(testeroutputfile_path, 'w') as f:
         f.write(

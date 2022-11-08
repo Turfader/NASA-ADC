@@ -37,4 +37,5 @@ def generate_heightmap():
         print(y_pos, y_pos//1)
         print(color)
 
+        # TODO: Fix this Line Error
         data[x_pos//1, y_pos//1] = color
