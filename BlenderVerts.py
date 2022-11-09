@@ -2,6 +2,11 @@ import bpy
 import csv, os, bmesh, math
 
 
+for o in bpy.context.scene.objects:
+    o.select = True
+bpy.ops.objects.delete()
+
+
 misc_data_path = os.getcwd() + "/ProcessedData/MiscData.txt"
 misc_data_path = misc_data_path.replace("\\", "/")
 
