@@ -2,9 +2,9 @@ import bpy
 import csv, os, bmesh, math
 
 
-for o in bpy.context.scene.objects:
-    o.select = True
-bpy.ops.objects.delete()
+bpy.ops.object.select_all(action='SELECT')
+
+bpy.ops.object.delete()
 
 
 misc_data_path = os.getcwd() + "/ProcessedData/MiscData.txt"
