@@ -70,3 +70,6 @@ mesh.update(calc_edges=True)
 bpy.context.scene.cursor.location = [0,0,0]
 object.location = bpy.context.scene.cursor.location
 bpy.data.collections["Collection"].objects.link(object)
+
+#saves the file as "testBlenderProgram.blend". CHANGE THE PATHING TO YOUR OWN COMPUTER!!!
+bpy.ops.wm.save_as_mainfile(filepath="C:/Users/Owner/Desktop/testBlenderProgram.blend")
