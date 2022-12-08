@@ -84,7 +84,6 @@ def calculateNeighbors(node):
         if 0<=node.index+maxXPos-1<len(nodes) and nodes[node.index+maxXPos-1].yPos <= maxYPos:
             init_graph[node][nodes[node.index+maxXPos-1]] = calculateValue(nodes[node.index+maxXPos-1], node)
 
-
     if 0<=node.index - maxXPos<len(nodes) and nodes[node.index - maxXPos].yPos >= minYPos:
         init_graph[node][nodes[node.index - maxXPos]] = calculateValue(nodes[node.index - maxXPos], node)
     if 0<=node.index + maxXPos<len(nodes) and nodes[node.index + maxXPos].yPos <= maxYPos:

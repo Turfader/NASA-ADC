@@ -1,5 +1,5 @@
 # This program is the central hub that the other programs are run from
-# TODO: Ask JL how this runs, and get it working.
+
 from subprocess import run
 import FolderCreator as fc
 

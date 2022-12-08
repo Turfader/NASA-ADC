@@ -14,16 +14,16 @@ height_path = paths[2].replace("\\", "/")
 slope_path = paths[3].replace("\\", "/")
 
 # Creates Lists of each Data Type from the Paths Given.
-with open(latitude_path) as csv_file:
+with open(latitude_path[0:len(latitude_path) - 1]) as csv_file:
     latitude_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(longitude_path) as csv_file:
+with open(longitude_path[0:len(latitude_path) - 1]) as csv_file:
     longitude_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(height_path) as csv_file:
+with open(height_path[0:len(latitude_path) - 1]) as csv_file:
     height_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(slope_path) as csv_file:
+with open(slope_path[0:len(latitude_path) - 1]) as csv_file:
     slope_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
 
