@@ -89,14 +89,15 @@ def write_rect_file(data_arr):
     # print("min y: ", min_y)
 
 def write_misc_file():
-    path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
+    misc_path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
 
-    with open(path, mode="w", newline="") as f:
+    with open(misc_path, mode="w", newline="") as f:
         csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow(['x and y dimensions (sizes of array)', 'distance between points'])
-        csv_writer.writerow([x_and_y_dim, DISTANCE_BETWEEN_POINTS])
+        csv_writer.writerow([x_and_y_dim]) # Line 1
+        csv_writer.writerow([DISTANCE_BETWEEN_POINTS]) # Line 2
 
     f.close()
+    return misc_path
 
 # Helper Methods for Finding Maximums and Minimums of Each Attribute of <DataArray>
 def find_max_value(data_arr, attr):
@@ -134,7 +135,7 @@ absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
 write_rect_file(dataArray)
-write_misc_file()
+misc_path = write_misc_file()
 print("Data Processing Success")
 
 

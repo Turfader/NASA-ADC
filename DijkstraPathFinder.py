@@ -1,6 +1,7 @@
 import math
 import csv
 import os
+import DataProcessor as dp
 
 nodes = []
 
@@ -26,7 +27,7 @@ class Points:
 
 def generateStartingPoints():
 
-    processedDataPath = os.getcwd() + "/ProcessedData/ProcessedCoordinateData.csv"
+    processedDataPath = dp.misc_path
     processedDataPath = processedDataPath.replace("\\", "/")
 
     with open(processedDataPath) as csv_file:
@@ -60,7 +61,7 @@ def calculateValue(point1, point2):
     return value
 
 def calculateNeighbors(node):
-    misc_data_path = os.getcwd() + "/ProcessedData/MiscData.txt"
+    misc_data_path = dp.misc_path
     misc_data_path = misc_data_path.replace("\\", "/")
     with open(misc_data_path, mode="r") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
@@ -223,6 +224,7 @@ if __name__ == "__main__":
     graph = Graph(nodes, init_graph)
 
     previous_nodes, shortest_path = dijkstra_algorithm(graph=graph, start_node=nodes[0])
+    print("Djikstra Success")
     print_result(previous_nodes, shortest_path, start_node=nodes[0], target_node=nodes[24]) # change the starting nodes to test. 
                                                                                             #Make sure you dont start on a node with slope > 20
 
