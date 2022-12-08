@@ -4,6 +4,8 @@ import csv
 import math
 import FolderCreator as fc
 
+x_and_y_dim = None
+
 with open(fc.testerpathfile_path, 'r') as f:
     paths = f.readlines()
     f.close()
@@ -42,6 +44,7 @@ def generate_data_array():
 
     rows = len(longitude_list)
     cols = len(longitude_list[0])
+    x_and_y_dim = len(longitude_list)
 
     for row in range(rows):
         for data_pt in range(cols):
@@ -128,3 +131,11 @@ absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
 write_rect_file(dataArray)
+print("Success")
+
+'''
+MiscData.csv
+-> x_and_y_dim
+-> dist between points: Hardcode it to always write 40, but change later. 
+-> 
+'''
