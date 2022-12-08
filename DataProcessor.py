@@ -4,7 +4,7 @@ import csv
 import math
 import FolderCreator as fc
 
-x_and_y_dim = None
+DISTANCE_BETWEEN_POINTS = 40
 
 with open(fc.testerpathfile_path, 'r') as f:
     paths = f.readlines()
@@ -44,7 +44,7 @@ def generate_data_array():
 
     rows = len(longitude_list)
     cols = len(longitude_list[0])
-    x_and_y_dim = len(longitude_list)
+    xy_dim = len(longitude_list)
 
     for row in range(rows):
         for data_pt in range(cols):
@@ -54,6 +54,8 @@ def generate_data_array():
                 [latitude_list[row][data_pt], longitude_list[row][data_pt], height_list[row][data_pt],
                  slope_list[row][data_pt]]
             )
+
+    return xy_dim
 
 
 # Helper Functions for Math
@@ -86,14 +88,15 @@ def write_rect_file(data_arr):
     # print("min x: ", min_x)
     # print("min y: ", min_y)
 
-    # TODO: Get FilePath and Data Clarified to Finish Writing Average File.
-    '''
-    testeroutputfile_path = os.path.join(rect_coord_path, "TestAverageOutput")
-    with open(testeroutputfile_path, 'w') as f:
-        f.write(
-            
-        )
-    '''
+def write_misc_file():
+    path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
+
+    with open(path, mode="w", newline="") as f:
+        csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        csv_writer.writerow(['x and y dimensions (sizes of array)', 'distance between points'])
+        csv_writer.writerow([x_and_y_dim, DISTANCE_BETWEEN_POINTS])
+
+    f.close()
 
 # Helper Methods for Finding Maximums and Minimums of Each Attribute of <DataArray>
 def find_max_value(data_arr, attr):
@@ -124,20 +127,15 @@ def find_min_lat(data_arr):
     return find_min_value(data_arr, 0)
 
 
-generate_data_array()
+x_and_y_dim = generate_data_array()
 
 absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
 write_rect_file(dataArray)
-print("Success")
+write_misc_file()
+print("Data Processing Success")
 
-'''
-MiscData.csv
--> x_and_y_dim
--> dist between points: Hardcode it to always write 40, but change later. 
--> 
--> Find a plausible landing zone, and find a way for the algorithm to get between it 
-    -> i.e. we nee a startpoint and an endpoint for djikstra
-'''
+
+# TODO: Find a plausible landing zone, and find a way for the algorithm to get between it / i.e. we nee a startpoint and an endpoint for djikstra
