@@ -8,22 +8,22 @@ with open(fc.testerpathfile_path, 'r') as f:
     paths = f.readlines()
     f.close()
 
-latitude_path = paths[0].replace("\\", "/")
-longitude_path = paths[1].replace("\\", "/")
-height_path = paths[2].replace("\\", "/")
-slope_path = paths[3].replace("\\", "/")
+latitude_path = paths[0].replace("\\", "/").rstrip("\n")
+longitude_path = paths[1].replace("\\", "/").rstrip("\n")
+height_path = paths[2].replace("\\", "/").rstrip("\n")
+slope_path = paths[3].replace("\\", "/").rstrip("\n")
 
 # Creates Lists of each Data Type from the Paths Given.
-with open(latitude_path[0:len(latitude_path) - 1]) as csv_file:
+with open(latitude_path) as csv_file:
     latitude_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(longitude_path[0:len(latitude_path) - 1]) as csv_file:
+with open(longitude_path) as csv_file:
     longitude_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(height_path[0:len(latitude_path) - 1]) as csv_file:
+with open(height_path) as csv_file:
     height_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-with open(slope_path[0:len(latitude_path) - 1]) as csv_file:
+with open(slope_path) as csv_file:
     slope_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
 
@@ -55,11 +55,11 @@ def generate_data_array():
 
 # Helper Functions for Math
 def convert_degrees_to_meters(deg):  # takes in degrees latitude
-    return (30366 + 1 / 9) * (90 + deg)
+    return (30366 + 1 / 9) * (90 + float(deg))
 def x_cord_from_polar(r, theta):
-    return r * math.cos(theta * math.pi / 180)
+    return r * math.cos(float(theta) * math.pi / 180)
 def y_cord_from_polar(r, theta):
-    return r * math.sin(theta * math.pi / 180)
+    return r * math.sin(float(theta) * math.pi / 180)
 
 
 def write_rect_file(data_arr):
