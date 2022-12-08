@@ -11,10 +11,12 @@ sub_folder_2_name = "AppFiles"
 sub_folder_3_name = "RawData"
 path_main = None
 
+
 # Ask for Path
 # If Path is Invalid, Try Again until Valid Path is Entered.
 while True:
     parent_path = input("Enter a installation path: ")
+
     if not os.path.exists(parent_path):
         print("Invalid Install Path")
         continue
@@ -61,6 +63,7 @@ try:
 except FileExistsError: # Termination Alert.
     print("Folder Exists")
     quit()
+
 
 print("Installation Success")
 

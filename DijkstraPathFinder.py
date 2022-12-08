@@ -10,16 +10,16 @@ class Points:
         pass
 
     def __init__(self, x, y, z):
-        self.xPos = x
-        self.yPos = y
-        self.zPos = z
+        self.xPos = float(x)
+        self.yPos = float(y)
+        self.zPos = float(z)
         self.index = len(nodes)
 
     def __init__(self, x, y, z, slope):
-        self.xPos = x
-        self.yPos = y
-        self.zPos = z
-        self.slope = slope
+        self.xPos = float(x)
+        self.yPos = float(y)
+        self.zPos = float(z)
+        self.slope = float(slope)
         self.index = len(nodes)
 
     def getData(self):
@@ -27,7 +27,7 @@ class Points:
 
 def generateStartingPoints():
 
-    processedDataPath = dp.misc_path
+    processedDataPath = dp.rect_file_path
     processedDataPath = processedDataPath.replace("\\", "/")
 
     with open(processedDataPath) as csv_file:
@@ -35,8 +35,7 @@ def generateStartingPoints():
         dataList = list(csv_reader)
 
         for i in range(1, len(dataList)):
-            nodes.append(Points(dataList[i][0],
-                                Points(dataList[i][1], Points(dataList[i][2], Points(dataList[i][3])))))
+            nodes.append(Points(dataList[i][0], dataList[i][1], dataList[i][2], dataList[i][3]))
 
 
 def printAllPoints(arr):
@@ -66,9 +65,10 @@ def calculateNeighbors(node):
     with open(misc_data_path, mode="r") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         full_list = list(csv_reader)
-        x_and_y_dims = int(full_list[0])
-        dist_btw_pts = float(full_list[1])
-        min_height = float(full_list[2])
+
+        x_and_y_dims = int(full_list[0][0])
+        # dist_btw_pts = float(full_list[1][0])
+        # min_height = float(full_list[2])
 
 
 
@@ -122,7 +122,7 @@ class Graph(object):
 
         for node, edges in graph.items():
             for adjacent_node, value in edges.items():
-                if graph[adjacent_node].get(node, False) == False:
+                if graph[adjacent_node].get(node, False) is False:
                     graph[adjacent_node][node] = value
 
         return graph
@@ -183,6 +183,7 @@ def dijkstra_algorithm(graph, start_node):
 
         # After visiting its neighbors, we mark the node as "visited"
         unvisited_nodes.remove(current_min_node)
+        print(len(unvisited_nodes))
 
     return previous_nodes, shortest_path
 
@@ -210,7 +211,7 @@ def print_result(previous_nodes, shortest_path, start_node, target_node):
 
 if __name__ == "__main__":
     generateStartingPoints()
-    printAllPoints(nodes)
+    # printAllPoints(nodes)
 
 
     init_graph = {}

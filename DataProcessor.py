@@ -81,6 +81,8 @@ def write_rect_file(data_arr):
             csv_writer.writerow([x, y, data_arr[i][2],  # 2 is Height
                                  data_arr[i][3]])  # 3 is Slope
         datafile.close()
+
+    return rect_coord_path
             # if x < min_x:
             #    min_x = x
             # if y < min_y:
@@ -134,7 +136,7 @@ absolute_min_height = find_min_height(dataArray)
 absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
-write_rect_file(dataArray)
+rect_file_path = write_rect_file(dataArray)
 misc_path = write_misc_file()
 print("Data Processing Success")
 
