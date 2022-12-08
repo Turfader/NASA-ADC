@@ -138,4 +138,6 @@ MiscData.csv
 -> x_and_y_dim
 -> dist between points: Hardcode it to always write 40, but change later. 
 -> 
+-> Find a plausible landing zone, and find a way for the algorithm to get between it 
+    -> i.e. we nee a startpoint and an endpoint for djikstra
 '''
