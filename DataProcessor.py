@@ -90,13 +90,14 @@ def write_rect_file(data_arr):
     # print("min x: ", min_x)
     # print("min y: ", min_y)
 
-def write_misc_file():
+def write_misc_file(min_height):
     misc_path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
 
     with open(misc_path, mode="w", newline="") as f:
         csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([x_and_y_dim]) # Line 1
         csv_writer.writerow([DISTANCE_BETWEEN_POINTS]) # Line 2
+        csv_writer.writerow([min_height]) # Line 3
 
     f.close()
     return misc_path
@@ -116,6 +117,8 @@ def find_min_value(data_arr, attr):
             tmp = float(data_arr[i][attr])
     return tmp
 
+
+# Latitude is DataArr[0], Longitude is DataArr[1], Height is DataArr[2], Slope is DataArr[3]
 def find_min_height(data_arr):
     return find_min_value(data_arr, 2)
 def find_max_height(data_arr):
@@ -137,7 +140,7 @@ absolute_max_height = find_max_height(dataArray)
 abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
 rect_file_path = write_rect_file(dataArray)
-misc_path = write_misc_file()
+misc_path = write_misc_file(absolute_min_height)
 print("Data Processing Success")
 
 
