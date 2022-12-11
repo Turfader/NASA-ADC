@@ -52,9 +52,9 @@ try:
     # THESE LINES IMITATE THE FUNCTIONS OF PathFinder.cp, AND SHOULD BE REMOVED IN THE FINAL PRODUCT ----
     testerpathfile_path = os.path.join(path_sub3, "TestPaths")
     with open(testerpathfile_path, 'w') as f:
-        # Long, Lat, Height, Slope [In Order]
-        f.write("C:/Users/ashwa/Downloads/RegLong.csv\n")
+        # Lat, Long, Height, Slope [In Order]
         f.write("C:/Users/ashwa/Downloads/RegLat.csv\n")
+        f.write("C:/Users/ashwa/Downloads/RegLong.csv\n")
         f.write("C:/Users/ashwa/Downloads/RegHeight.csv\n")
         f.write("C:/Users/ashwa/Downloads/RegSlope.csv\n")
         f.close()
