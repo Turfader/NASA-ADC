@@ -26,10 +26,10 @@ class Sky(Entity):
         self.world_position = camera.world_position
 
 
-# Sky()
+Sky()
 
-# player = FirstPersonController()
+player = FirstPersonController()
 
-EditorCamera()
+#EditorCamera()
 
 app.run()
