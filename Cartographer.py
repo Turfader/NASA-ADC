@@ -16,13 +16,6 @@ with open(rect_coord_path, mode="r") as csv_file:
 def calculate_color(height):
     color = ((height+2872)*255/4830)
     return color, color, color
-# data is being lost by saving as an int ^^
-
-# min x = -31 062
-# max x = 20 047
-# min y = -12 036
-# max y = 39 073
-### Testing below, please ignore ###
 
 
 def draw_points():
