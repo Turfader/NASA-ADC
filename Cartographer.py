@@ -1,41 +1,76 @@
 # This program is used to create the heightmap and slope map from the data
 
 import csv
+import pygame
+from pygame import gfxdraw
 import os
-import FolderCreator as fc
 
 
-rect_coord_path = fc.path_sub1.replace("\\", "/") + "/ProcessedCoordinateData.csv"
+rect_coord_path = os.getcwd() + "/Raw Data/Rectangular Coordinate Data.csv"
+rect_coord_path = rect_coord_path.replace("\\", "/")
 with open(rect_coord_path, mode="r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
-    datalist = list(csv_reader)
+    full_list = list(csv_reader)
 
-# The following function is obsolete, but I am keeping it in for reference
-def calculate_color(ht): # ht = height
-    color = ((ht+2872)*255/4830)
-    return int(color), int(color), int(color)
+
+def calculate_color(height):
+    color = ((height+2872)*255/4830)
+    return color, color, color
 # data is being lost by saving as an int ^^
 
+# min x = -31 062
+# max x = 20 047
+# min y = -12 036
+# max y = 39 073
+### Testing below, please ignore ###
 
-### Image drawing ###
+
+def draw_points():
+    for i in range(1, len(full_list)):
+        color = calculate_color(float(full_list[i][2]))
+        x_pos = (i-1) % 1277
+        y_pos = (i-1)//1277
+        print(x_pos, y_pos)
+        #screen.set_at((x_pos, y_pos), color)
+        gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
+        # note that there is a bit of data loss here.
+        # Ideally, we'd make the final image have a size equal to the maximum span of the x and y data
 
 
-width, height = (1278, 1278)
+def draw_slopes():
+    for i in range(1, len(full_list)):
+        color = (255, 0, 0)
+        if float(full_list[i][3]) < 20:
+            color = (255, 255, 0)
+        if float(full_list[i][3]) < 8:
+            color = (0, 255, 0)
+        x_pos = (i-1) % 1277
+        y_pos = (i-1)//1277
+        print(x_pos, y_pos)
+        #screen.set_at((x_pos, y_pos), color)
+        gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
 
 
-def generate_heightmap():
-    for i in range(1, len(datalist)):
-        x_pos = ((float(datalist[i][0])) + 31062.917916580405) / 40  # This section of code still needs a little work. The /40 is used for
-        # compressing it into an image without empty space. IDK how we'll want to port this into blender.
-        y_pos = ((float(datalist[i][1])) + 12036.902076767392) / 40
-        # The following line of code does not work yet. We need to add the minimum height still
-        #height = ((float(full_list[i][2])) + ###min height###)
-        color = calculate_color(float(datalist[i][2]))  # this line of code is obsolete, but I am keeping it in for reference
-        print()
-        print(i)
-        print(x_pos, x_pos//1)  # the whole number rounding is a product of impercision. This section needs to be looked at again.
-        print(y_pos, y_pos//1)
-        print(color)
+print("initiating pygame")
+pygame.init()
+screen = pygame.display.set_mode((1277, 1277))
 
-        # TODO: Fix this Line Error
-        data[x_pos//1, y_pos//1] = color
+done = False
+clock = pygame.time.Clock()
+while not done:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            done = True
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_h:
+                draw_points()
+            elif event.key == pygame.K_s:
+                draw_slopes()
+
+    #screen.fill((0, 0, 255))
+
+    #draw_points()
+    #draw_slopes()
+
+    pygame.display.flip()
+    clock.tick(60)
