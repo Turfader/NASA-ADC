@@ -58,9 +58,9 @@ Sky()
 player = FirstPersonController(position= (200, 1000, 200), speed=50, mouse_sensitivity=Vec2(25, 25))
 
 def input(key):
-    if key == 'r':
+    if key == 'p':
         player.set_position((200, 200, 200))
-    if key == 's':
+    if key == 'l':
         ground.texture = 'slopemap_test'
     if key == 'h':
         ground.texture = 'color_heights_test'
