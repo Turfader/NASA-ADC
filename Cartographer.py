@@ -35,7 +35,7 @@ def draw_points(isPygame):
 def draw_slopes(isPygame):
     for i in range(1, len(full_list)):
         color = (255, 0, 0)
-        if float(full_list[i][3]) < 20:
+        if float(full_list[i][3]) < 15:
             color = (255, 255, 0)
         if float(full_list[i][3]) < 8:
             color = (0, 255, 0)
