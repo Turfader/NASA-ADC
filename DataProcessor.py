@@ -4,12 +4,13 @@ import csv
 import math
 import FolderCreator as fc
 
-DISTANCE_BETWEEN_POINTS = 40
 
-with open(fc.testerpathfile_path, 'r') as f:
+
+with open(fc.pathfile_path, 'r') as f:
     paths = f.readlines()
     f.close()
 
+DISTANCE_BETWEEN_POINTS = paths[4].rstrip("\n")
 latitude_path = paths[0].replace("\\", "/").rstrip("\n")
 longitude_path = paths[1].replace("\\", "/").rstrip("\n")
 height_path = paths[2].replace("\\", "/").rstrip("\n")

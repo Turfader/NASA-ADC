@@ -3,6 +3,7 @@ FolderCreator.py makes folders and directories for all files for the FPA Team NA
 App Development Challenge Application.
 """
 import os
+import csv
 
 # Names
 main_folder_name = "ADCLander"
@@ -11,6 +12,11 @@ sub_folder_2_name = "AppFiles"
 sub_folder_3_name = "RawData"
 path_main = None
 
+
+def find_file(name, path):
+    for root, dirs, files in os.walk(path):
+        if name in files:
+            return os.path.join(root, name)
 
 # Ask for Path
 # If Path is Invalid, Try Again until Valid Path is Entered.
@@ -50,13 +56,22 @@ try:
 
 
     # THESE LINES IMITATE THE FUNCTIONS OF PathFinder.cp, AND SHOULD BE REMOVED IN THE FINAL PRODUCT ----
-    testerpathfile_path = os.path.join(path_sub3, "TestPaths")
-    with open(testerpathfile_path, 'w') as f:
+    pathfile_path = os.path.join(path_sub3, "Paths to Data.txt")
+    with open(pathfile_path, 'w') as f:
         # Lat, Long, Height, Slope [In Order]
-        f.write("C:/Users/ashwa/Downloads/RegLat.csv\n")
-        f.write("C:/Users/ashwa/Downloads/RegLong.csv\n")
-        f.write("C:/Users/ashwa/Downloads/RegHeight.csv\n")
-        f.write("C:/Users/ashwa/Downloads/RegSlope.csv\n")
+        path_data_path = find_file(name='PathData.csv', path='C:/Users/ashwa/Downloads')
+        with open(path_data_path) as csv_file:
+            paths = list(csv.reader(csv_file, delimiter=','))
+            csv_file.close()
+
+            slash = "\\"
+            f.write(f'{str(paths[1])[2:-2].replace(slash, "/")}\n')
+            f.write(f'{str(paths[0])[2:-2].replace(slash, "/")}\n')
+            f.write(f'{str(paths[2])[2:-2].replace(slash, "/")}\n')
+            f.write(f'{str(paths[3])[2:-2].replace(slash, "/")}\n')
+            f.write(f'{int(str(paths[4])[2:-2])}\n')
+
+
         f.close()
     # ---------------------------------------------------------------------------------------------------
 
