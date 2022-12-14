@@ -7,7 +7,7 @@ import os
 
 from PIL import Image, ImageDraw
 
-rect_coord_path = os.getcwd() + "/Raw Data/Rectangular Coordinate Data.csv"
+rect_coord_path = "C:/Users/ashwa/Desktop/ADCLander/ProcessedData/ProcessedCoordinateData.csv"
 rect_coord_path = rect_coord_path.replace("\\", "/")
 with open(rect_coord_path, mode="r") as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=',')
@@ -73,12 +73,12 @@ def draw_slopes(isPygame):
 ###
 
 canvas = Image.new('RGB', (1277, 1277), 'blue')
-draw_points(False)
-canvas.save('C:/Users/Owner/Desktop/heightmap_test.jpg')
-draw_slopes(False)
-canvas.save('C:/Users/Owner/Desktop/slopemap_test.jpg')
+#draw_points(False)
+#canvas.save('C:/Users/ashwa/Desktop/heightmap_test.jpg')
+#draw_slopes(False)
+#canvas.save('C:/Users/ashwa/Desktop/slopemap_test.jpg')
 draw_colors(False)
-canvas.save('C:/Users/Owner/Desktop/color_heights_test.jpg')
+canvas.save('C:/Users/ashwa/Desktop/color_heights_test.jpg')
 
 ###
 

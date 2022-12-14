@@ -60,12 +60,15 @@ def input(key):
         player.set_position((0, 200, 0))
     if key == 's':
         ground.texture = 'slopemap_test'
-    if key == 'm'
+    if key == 'h':
+        ground.texture = 'color_heights_test'
+    if key == 'm':
         ground.texture = 'moon9'
 def update():
     x, y, z = player.position.x, player.position.y, player.position.z
+
     #for scale testing
-    print(f'x = {x}, y = {y}, z = {z}')
+    #print(f'x = {x}, y = {y}, z = {z}')
 
     t_lat.text = 'Latitude: ' + latitudes[int(x) + 620][int(abs(z-620))]
     t_lon.text = 'Longitude: ' + longitudes[int(x) + 620][int(abs(z-620))]
