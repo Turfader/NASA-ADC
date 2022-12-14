@@ -3,7 +3,7 @@ import numpy as np
 from ursina import *
 from ursina.prefabs.first_person_controller import FirstPersonController
 
-path = "C:/Users/ashwa/Desktop/testBlenderProgram.blend"
+
 app = Ursina()
 
 ground = Entity(
@@ -22,9 +22,13 @@ t_slope = Text(text='Slope:', x=-.8, y=.30, scale=1.1)
 t_azi = Text(text='Azimuth:', x=-.8, y=.25, scale=1.1)
 t_elev = Text(text='Elevation:', x=-.8, y=.20, scale=1.1)
 
-t_info = Text(text='R for Real or Reset, M for Moon, H for Heightmap, S for Slope Map', x=-.8, y=-.20, scale=1.1)
-
-
+t_info = Text(
+    text='P for Reset, R for Real, M for Moon, H for Heightmap, L for Slope Map',
+    x=-.01,
+    y=-.45,
+    scale=1.1,
+    color=color.black
+)
 
 latitudes, longitudes, heights, slopes = [], [], [], []
 with open('C:/Users/ashwa/Downloads/RegLat.csv') as csv_file:
@@ -44,6 +48,7 @@ with open('C:/Users/ashwa/Downloads/RegSlope.csv') as csv_file:
     for row in reads:
         slopes.append(row)
 
+
 # Changes Sky Background to Black (0x000000)
 class Sky(Entity):
     def __init__(self, **kwargs):
@@ -55,11 +60,13 @@ class Sky(Entity):
         self.world_position = camera.world_position
 
 Sky()
+
 player = FirstPersonController(position= (200, 1000, 200), speed=50, mouse_sensitivity=Vec2(25, 25))
 
+# Shortcuts/Toggle Functions
 def input(key):
-    if key == 'p':
-        player.set_position((200, 200, 200))
+    #if key == 'p':
+    #    player.set_position((200, 200, 200))
     if key == 'l':
         ground.texture = 'slopemap_test'
     if key == 'h':
@@ -67,7 +74,7 @@ def input(key):
     if key == 'm':
         ground.texture = 'moon9'
     if key == 'r':
-        ground.texture = 'moon7'
+        ground.texture = 'moon17'
 
 
 def update():
@@ -86,20 +93,20 @@ def update():
     yM = latM * math.sin(float(longM) * math.pi / 180)
     zM = float(heights[int(x) + 620][int(abs(z-620))])
 
-    vecRes = [xE-xM, yE-yM, zE-zM]
+    resultant_vector = [xE-xM, yE-yM, zE-zM]
 
-    range = sqrt(vecRes[0] ** 2 + vecRes[1] ** 2 + vecRes[2] ** 2)
+    range = sqrt(resultant_vector[0] ** 2 + resultant_vector[1] ** 2 + resultant_vector[2] ** 2)
 
-    rz = vecRes[0] * cos(latM) * cos(longM) + vecRes[1] * cos(latM) * cos(longM) + vecRes[2] * sin(latM)
+    rz = resultant_vector[0] * cos(latM) * cos(longM) + resultant_vector[1] * cos(latM) * cos(longM) + resultant_vector[2] * sin(latM)
 
-    a = sin(longE - longM) * cos(latE)
-    b = (cos(latM) * sin(latE)) - (sin(latM) * cos(latE) * cos(longE - longM))
+    c1 = sin(longE - longM) * cos(latE)
+    c2 = (cos(latM) * sin(latE)) - (sin(latM) * cos(latE) * cos(longE - longM))
 
     # Elevation Value
     elev = np.arcsin(rz/range)
 
     # Azimuth Angle Value
-    azimuth = np.arctan2(a, b)
+    azimuth = np.arctan2(c1, c2)
 
     #for scale testing
     #print(f'x = {x}, y = {y}, z = {z}')

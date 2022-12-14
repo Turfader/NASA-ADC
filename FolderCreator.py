@@ -59,7 +59,7 @@ try:
     pathfile_path = os.path.join(path_sub3, "Paths to Data.txt")
     with open(pathfile_path, 'w') as f:
         # Lat, Long, Height, Slope [In Order]
-        path_data_path = find_file(name='PathData.csv', path='C:/Users/ashwa/Downloads')
+        path_data_path = find_file(name='PathData.csv', path='C:/Users/ashwa/Desktop')
         with open(path_data_path) as csv_file:
             paths = list(csv.reader(csv_file, delimiter=','))
             csv_file.close()
