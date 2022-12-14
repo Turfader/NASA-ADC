@@ -3,6 +3,7 @@
 import csv
 import math
 import FolderCreator as fc
+from numpy import cos, sin
 
 
 

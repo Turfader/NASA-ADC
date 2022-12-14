@@ -7,6 +7,9 @@ import os
 
 from PIL import Image, ImageDraw
 
+#Change from 1277 to 4000 for Regional Data File
+SIZE_CONSTANT = 4000
+
 rect_coord_path = "C:/Users/ashwa/Desktop/ADCLander/ProcessedData/ProcessedCoordinateData.csv"
 rect_coord_path = rect_coord_path.replace("\\", "/")
 with open(rect_coord_path, mode="r") as csv_file:
@@ -32,8 +35,8 @@ def calc_rgb_color(height):
 def draw_points(isPygame):
     for i in range(1, len(full_list)):
         color = calculate_color(float(full_list[i][2]))
-        x_pos = (i-1) % 1277
-        y_pos = (i-1)//1277
+        x_pos = (i-1) % SIZE_CONSTANT
+        y_pos = (i-1) // SIZE_CONSTANT
         print(x_pos, y_pos)
         if isPygame:
             gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
@@ -46,8 +49,8 @@ def draw_points(isPygame):
 def draw_colors(isPygame):
     for i in range(1, len(full_list)):
         color = calc_rgb_color(float(full_list[i][2]))
-        x_pos = (i-1) % 1277
-        y_pos = (i-1)//1277
+        x_pos = (i-1) % SIZE_CONSTANT
+        y_pos = (i-1)//SIZE_CONSTANT
         print(x_pos, y_pos)
         if isPygame:
             gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
@@ -62,8 +65,8 @@ def draw_slopes(isPygame):
             color = (255, 255, 0)
         if float(full_list[i][3]) < 8:
             color = (0, 255, 0)
-        x_pos = (i-1) % 1277
-        y_pos = (i-1)//1277
+        x_pos = (i-1) % SIZE_CONSTANT
+        y_pos = (i-1)//SIZE_CONSTANT
         print(x_pos, y_pos)
         if isPygame:
             gfxdraw.pixel(screen, int(x_pos), int(y_pos), color)
@@ -72,7 +75,7 @@ def draw_slopes(isPygame):
 
 ###
 
-canvas = Image.new('RGB', (1277, 1277), 'blue')
+canvas = Image.new('RGB', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
 #draw_points(False)
 #canvas.save('C:/Users/ashwa/Desktop/heightmap_test.jpg')
 #draw_slopes(False)
@@ -84,7 +87,7 @@ canvas.save('C:/Users/ashwa/Desktop/color_heights_test.jpg')
 
 print("initiating pygame")
 pygame.init()
-screen = pygame.display.set_mode((1277, 1277))
+screen = pygame.display.set_mode((SIZE_CONSTANT, SIZE_CONSTANT))
 
 done = True
 clock = pygame.time.Clock()
