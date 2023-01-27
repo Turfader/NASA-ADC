@@ -8,7 +8,7 @@ import os
 from PIL import Image, ImageDraw
 
 #Change from 1277 to 4000 for Regional Data File
-SIZE_CONSTANT = 4000
+SIZE_CONSTANT = 1277
 
 rect_coord_path = "C:/Users/ashwa/Desktop/ADCLander/ProcessedData/ProcessedCoordinateData.csv"
 rect_coord_path = rect_coord_path.replace("\\", "/")
@@ -76,10 +76,10 @@ def draw_slopes(isPygame):
 ###
 
 canvas = Image.new('RGB', (SIZE_CONSTANT, SIZE_CONSTANT), 'blue')
-#draw_points(False)
-#canvas.save('C:/Users/ashwa/Desktop/heightmap_test.jpg')
-#draw_slopes(False)
-#canvas.save('C:/Users/ashwa/Desktop/slopemap_test.jpg')
+draw_points(False)
+canvas.save('C:/Users/ashwa/Desktop/heightmap_test.jpg')
+draw_slopes(False)
+canvas.save('C:/Users/ashwa/Desktop/slopemap_test.jpg')
 draw_colors(False)
 canvas.save('C:/Users/ashwa/Desktop/color_heights_test.jpg')
 

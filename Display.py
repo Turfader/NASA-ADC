@@ -23,8 +23,8 @@ t_azi = Text(text='Azimuth:', x=-.8, y=.25, scale=1.1)
 t_elev = Text(text='Elevation:', x=-.8, y=.20, scale=1.1)
 
 t_info = Text(
-    text='P for Reset, R for Real, M for Moon, H for Heightmap, L for Slope Map',
-    x=-.01,
+    text='P for Path, R for Real, M for Moon, H for Heightmap, L for Slope Map, O for Reset',
+    x=-.15,
     y=-.45,
     scale=1.1,
     color=color.black
@@ -65,8 +65,8 @@ player = FirstPersonController(position= (200, 1000, 200), speed=50, mouse_sensi
 
 # Shortcuts/Toggle Functions
 def input(key):
-    #if key == 'p':
-    #    player.set_position((200, 200, 200))
+    if key == 'o':
+        player.set_position((200, 200, 200))
     if key == 'l':
         ground.texture = 'slopemap_test'
     if key == 'h':
@@ -75,13 +75,15 @@ def input(key):
         ground.texture = 'moon9'
     if key == 'r':
         ground.texture = 'moon17'
+    if key == 'p':
+        ground.texture = 'LunarPath'
 
 
 def update():
     x, y, z = player.position.x, player.position.y, player.position.z
 
     # Azimuth Angle and Elevation Calculation
-    latE, longE = 29.5593, 95.0900
+    latE, longE = 29.5593, 95.0900 # Latitude and Longitude of Johnson Space Center.
     latM, longM = float(latitudes[int(x) + 620][int(abs(z-620))]), float(longitudes[int(x) + 620][int(abs(z-620))])
 
     rad_earth = 6378000
@@ -117,7 +119,11 @@ def update():
     t_ht.text = 'Height: ' + heights[int(x) + 620][int(abs(z-620))]
     t_slope.text = 'Slope: ' + slopes[int(x) + 620][int(abs(z-620))]
     t_azi.text = 'Azimuth: ' + str(azimuth)
-    t_elev.text = 'Elevation: ' + str(elev)
+    if str(elev) == 'nan':
+        t_elev.text = 'Elevation: 0'
+    else:
+        t_elev.text = 'Elevation: ' + str(elev)
+
 
     if player.position.y < -50:
          player.set_position((200, 200, 200))
