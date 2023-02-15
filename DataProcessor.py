@@ -1,10 +1,8 @@
 # This program takes the files from the csv and repackages them as an array of objects
 
 import csv
-import math
 import FolderCreator as fc
 from numpy import cos, sin
-
 
 
 with open(fc.pathfile_path, 'r') as f:
@@ -30,8 +28,6 @@ with open(height_path) as csv_file:
 with open(slope_path) as csv_file:
     slope_list = list(csv.reader(csv_file, delimiter=','))
     csv_file.close()
-
-dataArray = []
 
 
 # Call from each file instead of class specific calls.
@@ -85,11 +81,11 @@ def write_rect_file(data_arr):
             height = data_arr[i][2]
             slope = data_arr[i][3]
             radius = lunar_rad + height
-            
+
             x = get_x_coord(lat, long, radius)
             y = get_y_coord(lat, long, radius)
             z = get_z_coord(lat, long, radius)
-            
+
             csv_writer.writerow([x, y, z, slope])
         datafile.close()
 
@@ -141,12 +137,14 @@ def find_min_lat(data_arr):
     return find_min_value(data_arr, 0)
 
 
-x_and_y_dim = generate_data_array()
+if __name__ == "__main__":
+    dataArray = []
+    x_and_y_dim = generate_data_array()
 
-# absolute_min_height = find_min_height(dataArray)
-# absolute_max_height = find_max_height(dataArray)
-# abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
+    # absolute_min_height = find_min_height(dataArray)
+    # absolute_max_height = find_max_height(dataArray)
+    # abs_zero_height_scale = (abs(absolute_max_height) + abs(absolute_min_height))
 
-rect_file_path = write_rect_file(dataArray)
-# misc_path = write_misc_file(absolute_min_height)
-print("Data Processing Success")
+    rect_file_path = write_rect_file(dataArray)
+    # misc_path = write_misc_file(absolute_min_height)
+    print("Data Processing Success")
