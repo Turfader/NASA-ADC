@@ -5,9 +5,12 @@ import FolderCreator as fc
 from numpy import cos, sin
 
 
-with open(fc.pathfile_path, 'r') as f:
-    paths = f.readlines()
+with open(fc.pathfile_path, mode="r") as f:
+    paths = csv.reader(f, delimiter=',')
     f.close()
+    while True:
+        pass
+
 
 DISTANCE_BETWEEN_POINTS = paths[4].rstrip("\n")
 latitude_path = paths[0].replace("\\", "/").rstrip("\n")

@@ -76,7 +76,7 @@ try:
 
 except FileExistsError: # Termination Alert.
     show_error("Folder Already Exists on " + parent_path)
-    quit()
+    #quit()
 
 print("Installation Success")
 
