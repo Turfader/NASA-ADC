@@ -1,11 +1,12 @@
 # This program takes the files from the csv and repackages them as an array of objects
 
 import csv
+import os
 import FolderCreator as fc
 from numpy import cos, sin
 
-
-with open(fc.pathfile_path, mode="r") as f:
+pathfile_path = os.path.join(fc.appfiles_path, 'Paths to Data.txt')
+with open(pathfile_path, mode="r") as f:
     paths = csv.reader(f, delimiter=',')
     f.close()
     while True:
@@ -73,7 +74,7 @@ def get_z_coord(lat, long, rad):  # long is technically not used here. I kept it
 
 
 def write_rect_file(data_arr):
-    rect_coord_path = fc.path_sub1.replace("\\", "/") + "/ProcessedCoordinateData.csv"  # Processed Data Folder given from FolderCreator.py
+    rect_coord_path = fc.data_path + "/ProcessedCoordinateData.csv"  # Processed Data Folder given from FolderCreator.py
 
     with open(rect_coord_path, mode="w", newline="") as datafile:
         csv_writer = csv.writer(datafile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -96,7 +97,7 @@ def write_rect_file(data_arr):
 
 # TODO: finish astar data function
 def write_astar_data(data_arr):
-    astar_data_path = fc.path_sub1.replace("\\", "/") + "/Astar Data.csv"  # Processed Data Folder given from FolderCreator.py
+    astar_data_path = fc.data_path + "/Astar Data.csv"  # Processed Data Folder given from FolderCreator.py
 
     with open(astar_data_path, mode="w", newline="") as astar_data_file:
 
@@ -107,7 +108,7 @@ def write_astar_data(data_arr):
 
 
 def write_misc_file(min_height):
-    misc_path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
+    misc_path = fc.data_path + "/MiscData.csv"
 
     with open(misc_path, mode="w", newline="") as f:
         csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
