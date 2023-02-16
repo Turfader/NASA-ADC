@@ -4,7 +4,10 @@ App Development Challenge Application.
 """
 import os
 import csv
-from winreg import * # for downloads folder access
+
+import tkinter as tk
+from tkinter import messagebox
+
 
 # Names
 main_folder_name = "ADCLander"
@@ -13,22 +16,18 @@ sub_folder_2_name = "AppFiles"
 sub_folder_3_name = "RawData"
 path_main = None
 
+def show_error(err_type):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('ADC Lander Installation Error', err_type)
 
 def find_file(name, path):
     for root, dirs, files in os.walk(path):
         if name in files:
             return os.path.join(root, name)
 
-# Ask for Path
-# If Path is Invalid, Try Again until Valid Path is Entered.
-while True:
-    parent_path = input("Enter a installation path: ")
-
-    if not os.path.exists(parent_path):
-        print("Invalid Install Path")
-        continue
-    else:
-        break
+# Defaults to User's Desktop as the Installation Location
+parent_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 
 # Terminates all operations if the files exist.
 try:
@@ -76,9 +75,8 @@ try:
     # ---------------------------------------------------------------------------------------------------
 
 except FileExistsError: # Termination Alert.
-    print("Folder Exists")
+    show_error("Folder Already Exists on " + parent_path)
     quit()
-
 
 print("Installation Success")
 
