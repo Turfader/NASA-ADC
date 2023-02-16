@@ -4,6 +4,7 @@ App Development Challenge Application.
 """
 import os
 import csv
+from winreg import * # for downloads folder access
 
 # Names
 main_folder_name = "ADCLander"
@@ -59,7 +60,10 @@ try:
     pathfile_path = os.path.join(path_sub3, "Paths to Data.txt")
     with open(pathfile_path, 'w') as f:
         # Lat, Long, Height, Slope [In Order]
-        path_data_path = find_file(name='PathData.csv', path='C:/Users/ashwa/Desktop')
+        with OpenKey(HKEY_CURRENT_USER, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders') as key:
+            Downloads_Path = QueryValueEx(key, '{374DE290-123F-4565-9164-39C4925E467B}')[0]
+
+        path_data_path = find_file(name='PathData.csv', path=Downloads_Path)
         with open(path_data_path) as csv_file:
             paths = list(csv.reader(csv_file, delimiter=','))
             csv_file.close()

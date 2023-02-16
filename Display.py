@@ -15,6 +15,15 @@ ground = Entity(
     scale=(1240, 150, 1240)
 )
 
+'''
+ship = Entity(
+    model='C:/Users/ashwa/Downloads/lunar_lander.blend',
+    collider='mesh',
+    scale=(100, 50, 100)
+)
+'''
+
+
 t_lat = Text(text='Latitude:', x=-.8, y=.45, scale=1.1)
 t_lon = Text(text='Longitude:', x=-.8, y=.40, scale=1.1)
 t_ht = Text(text='Height:', x=-.8, y=.35, scale=1.1)
@@ -91,8 +100,8 @@ def update():
     yE = rad_earth * cos(latE) * sin(longE)
     zE = rad_earth * sin(latE)
 
-    xM = latM * math.cos(float(longM) * math.pi / 180)
-    yM = latM * math.sin(float(longM) * math.pi / 180)
+    xM = latM * cos(float(longM) * math.pi / 180)
+    yM = latM * sin(float(longM) * math.pi / 180)
     zM = float(heights[int(x) + 620][int(abs(z-620))])
 
     resultant_vector = [xE-xM, yE-yM, zE-zM]
