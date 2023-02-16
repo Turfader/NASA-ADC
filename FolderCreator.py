@@ -27,7 +27,7 @@ def find_file(name, path):
             return os.path.join(root, name)
 
 # Defaults to User's Desktop as the Installation Location
-parent_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+parent_path = os.getcwd() #os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
 
 # Terminates all operations if the files exist.
 try:

@@ -1,7 +1,8 @@
 # This program is the central hub that the other programs are run from
 
 from subprocess import run
-import FolderCreator as fc
+import os
+
 
 # runs DataProcessor.py
 data_processor_path = fc.path_sub2.replace("\\", "/") + "/DataProcessor.py"
