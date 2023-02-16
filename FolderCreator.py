@@ -1,83 +1,65 @@
 """
 FolderCreator.py makes folders and directories for all files for the FPA Team NASA
-App Development Challenge Application.
+App Development Challenge Application.#
 """
 import os
 import csv
-
 import tkinter as tk
 from tkinter import messagebox
-
-
-# Names
-main_folder_name = "ADCLander"
-sub_folder_1_name = "ProcessedData"
-sub_folder_2_name = "AppFiles"
-sub_folder_3_name = "RawData"
-path_main = None
-
-def show_error(err_type):
-    root = tk.Tk()
-    root.withdraw()
-    messagebox.showerror('ADC Lander Installation Error', err_type)
+from shutil import move
 
 def find_file(name, path):
     for root, dirs, files in os.walk(path):
         if name in files:
             return os.path.join(root, name)
 
-# Defaults to User's Desktop as the Installation Location
-parent_path = os.getcwd() #os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+def show_error(err_type, type):
+    root = tk.Tk()
+    root.withdraw()
+    messagebox.showerror('ADC Lander Installation ' + type, err_type)
 
-# Terminates all operations if the files exist.
-try:
+#IMPORTANT PATHING
+parent_path = os.getcwd()
+data_path = os.path.join(parent_path, 'Data')
+appfiles_path = os.path.join(parent_path, 'App Files')
+archive_path = os.path.join(appfiles_path, 'Archived Files')
+###################
 
-    path_main = os.path.join(parent_path, main_folder_name)
-    os.mkdir(path_main)
-
-    # Add the Subfolder Paths and Directories
-    path_sub1, path_sub2, path_sub3 = os.path.join(path_main, sub_folder_1_name), os.path.join(path_main, sub_folder_2_name), os.path.join(path_main, sub_folder_3_name)
-    os.mkdir(path_sub1)
-    os.mkdir(path_sub2)
-    os.mkdir(path_sub3)
-
-    # THIS SECTION WILL NOT BE IN THE FINAL PRODUCT --------------------------
-    # datanames = ['RegHeight.csv', 'RegLat.csv', 'RegLong.csv', 'RegSlope.csv']
-    # for file in datanames:
-    #    sh.copy(file, raw_path_sub1)
-    # ------------------------------------------------------------------------
-
-    # Add the Data File
-    textfile_path = os.path.join(path_sub2, "RunnerData")
-    with open(textfile_path, 'w') as f:
-        f.write(
-            f"Folder Created.\n{path_main}\n{path_sub1}\n{path_sub2}\n{path_sub3}\n".replace("\\", "/"))
-        f.close()
-
-
-    # THESE LINES IMITATE THE FUNCTIONS OF PathFinder.cp, AND SHOULD BE REMOVED IN THE FINAL PRODUCT ----
-    pathfile_path = os.path.join(path_sub3, "Paths to Data.txt")
+def processPathData():
+    pathfile_path = os.path.join(appfiles_path, "Paths to Data.txt")
     with open(pathfile_path, 'w') as f:
-        path_data_path = find_file(name='PathData.csv', path=os.getcwd())
-        with open(path_data_path) as csv_file:
-            paths = list(csv.reader(csv_file, delimiter=','))
-            csv_file.close()
-            # Lat, Long, Height, Slope [In Order]
-            slash = "\\"
-            f.write(f'{str(paths[1])[2:-2].replace(slash, "/")}\n')
-            f.write(f'{str(paths[0])[2:-2].replace(slash, "/")}\n')
-            f.write(f'{str(paths[2])[2:-2].replace(slash, "/")}\n')
-            f.write(f'{str(paths[3])[2:-2].replace(slash, "/")}\n')
-            f.write(f'{int(str(paths[4])[2:-2])}\n')
+        try:
+            path_data_path = find_file(name='PathData.csv', path=os.getcwd())
+
+            with open(path_data_path) as csv_file:
+                paths = list(csv.reader(csv_file, delimiter=','))
+                csv_file.close()
+                # Lat, Long, Height, Slope [In Order]
+                slash = "\\"
+                f.write(f'{str(paths[1])[2:-2].replace(slash, "/")}\n')
+                f.write(f'{str(paths[0])[2:-2].replace(slash, "/")}\n')
+                f.write(f'{str(paths[2])[2:-2].replace(slash, "/")}\n')
+                f.write(f'{str(paths[3])[2:-2].replace(slash, "/")}\n')
+                f.write(f'{int(str(paths[4])[2:-2])}\n')
+
+            if not os.path.exists(os.path.join(archive_path, path_data_path)):
+                move(path_data_path, archive_path)
+            f.close()
+        except TypeError:
+            show_error('Please run PathFinder.exe First', 'Failure')
+            quit()
+
+if __name__ == '__main__':
+    if not os.path.exists(os.path.join(parent_path, 'Data')):
+        os.mkdir(data_path)
+        os.mkdir(appfiles_path)
+        os.mkdir(archive_path)
+    else:
+        show_error("Folder Already Exists on " + parent_path + '\nFiles have been updated.', 'Update')
+
+    processPathData()
 
 
-        f.close()
-    # ---------------------------------------------------------------------------------------------------
-
-except FileExistsError: # Termination Alert.
-    show_error("Folder Already Exists on " + parent_path)
-    #quit()
-
-print("Installation Success")
+#print("Installation Success")
 
 
