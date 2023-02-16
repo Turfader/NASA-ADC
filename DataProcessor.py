@@ -91,6 +91,17 @@ def write_rect_file(data_arr):
 
     return rect_coord_path
 
+# TODO: finish astar data function
+def write_astar_data(data_arr):
+    astar_data_path = fc.path_sub1.replace("\\", "/") + "/Astar Data.csv"  # Processed Data Folder given from FolderCreator.py
+
+    with open(astar_data_path, mode="w", newline="") as astar_data_file:
+
+        astar_data_file.close()
+
+    return astar_data_path
+
+
 
 def write_misc_file(min_height):
     misc_path = fc.path_sub1.replace("\\", "/") + "/MiscData.csv"
